@@ -8,10 +8,10 @@ import MiddleSection from "./MiddleSection";
 import RightSection from "./RightSection";
 
 const ResizableSections = () => {
-  const [leftWidth, setLeftWidth] = useState(30); // Начальная ширина первой секции
-  const [middleWidth, setMiddleWidth] = useState(40); // Начальная ширина средней секции
-  const [htmlCode, setHtmlCode] = useState("<h1>Hello World</h1>"); // Начальный HTML-код
-  const [cssCode, setCssCode] = useState("body { background-color: tomato; }"); // Начальный CSS-код
+  const [leftWidth, setLeftWidth] = useState(30);
+  const [middleWidth, setMiddleWidth] = useState(40);
+  const [htmlCode, setHtmlCode] = useState("<h1>Hello World</h1>");
+  const [cssCode, setCssCode] = useState("body { background-color: tomato; }");
   const isDraggingLeft = useRef(false);
   const isDraggingRight = useRef(false);
 
@@ -54,25 +54,23 @@ const ResizableSections = () => {
   };
 
   return (
-    <Flex height="100vh">
-      {/* Первая секция */}
+    <Flex height="95vh">
       <LeftSection
         width={leftWidth}
-        setHtmlCode={setHtmlCode} // Передача функции для обновления HTML
-        setCssCode={setCssCode} // Передача функции для обновления CSS
+        setHtmlCode={setHtmlCode}
+        setCssCode={setCssCode}
       />
 
       <Resizer onMouseDown={handleMouseDownLeft} />
 
       <MiddleSection
         width={middleWidth}
-        htmlCode={htmlCode} // Передача HTML-кода
-        cssCode={cssCode} // Передача CSS-кода
+        htmlCode={htmlCode}
+        cssCode={cssCode}
       />
 
       <Resizer onMouseDown={handleMouseDownRight} />
 
-      {/* Правая секция */}
       <RightSection width={100 - leftWidth - middleWidth} />
     </Flex>
   );
