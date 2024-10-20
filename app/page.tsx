@@ -6,7 +6,6 @@ import ResizableSections from "./components/Main";
 export default function Home() {
   return (
     <div>
-      <Header />
       <ResizableSections />
     </div>
   );
