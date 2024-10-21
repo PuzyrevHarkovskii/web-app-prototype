@@ -12,7 +12,13 @@ import {
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { ReactNode } from "react";
 
-const Logo = (props: any) => {
+interface LogoProps {
+  width?: number;
+  height?: number;
+  [key: string]: any; // для остальных свойств
+}
+
+const Logo = (props: LogoProps) => {
   return (
     <svg
       height={32}

@@ -97,10 +97,6 @@ const ResizableSections: React.FC = () => {
     }
   };
 
-  const toggleRightSection = () => {
-    setIsRightSectionVisible(!isRightSectionVisible);
-  };
-
   const middleWidth =
     window.innerWidth - leftWidth - (isRightSectionVisible ? rightWidth : 0);
 
