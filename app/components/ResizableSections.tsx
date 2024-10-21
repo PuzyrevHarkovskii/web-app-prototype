@@ -7,8 +7,8 @@ import RightSection from "./RightSection";
 import Resizer from "./Resizer";
 
 const ResizableSections: React.FC = () => {
-  const [leftWidth, setLeftWidth] = useState<number>(300); // Инициализируем состояние
-  const [rightWidth, setRightWidth] = useState<number>(300); // Инициализируем состояние
+  const [leftWidth, setLeftWidth] = useState<number>(300);
+  const [rightWidth, setRightWidth] = useState<number>(300);
   const [isRightSectionVisible, setIsRightSectionVisible] =
     useState<boolean>(true);
 
@@ -21,7 +21,6 @@ const ResizableSections: React.FC = () => {
   const isDraggingRight = useRef(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Загружаем данные из localStorage только на клиентской стороне
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedLeftWidth = localStorage.getItem("leftWidth");
