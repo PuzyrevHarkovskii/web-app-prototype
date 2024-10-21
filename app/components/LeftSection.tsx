@@ -11,6 +11,9 @@ const LeftSection = ({
   setCssCode: (code: string) => void;
 }) => {
   const [activeButton, setActiveButton] = useState<"html" | "css">("html");
+
+  // Закомментированы все обращения к localStorage
+  /*
   const [htmlContent, setHtmlContent] = useState<string>(
     () => localStorage.getItem("htmlCode") || "<h1>Hello World</h1>"
   );
@@ -18,7 +21,16 @@ const LeftSection = ({
     () =>
       localStorage.getItem("cssCode") || "body { background-color: tomato; }"
   );
+  */
 
+  const [htmlContent, setHtmlContent] = useState<string>(
+    "<h1>Hello World</h1>"
+  );
+  const [cssContent, setCssContent] = useState<string>(
+    "body { background-color: tomato; }"
+  );
+
+  /*
   useEffect(() => {
     localStorage.setItem("htmlCode", htmlContent);
   }, [htmlContent]);
@@ -26,6 +38,7 @@ const LeftSection = ({
   useEffect(() => {
     localStorage.setItem("cssCode", cssContent);
   }, [cssContent]);
+  */
 
   const handleLanguageChange = (lang: "html" | "css") => {
     setActiveButton(lang);
