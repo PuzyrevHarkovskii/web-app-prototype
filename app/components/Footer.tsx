@@ -15,7 +15,8 @@ import { ReactNode } from "react";
 interface LogoProps {
   width?: number;
   height?: number;
-  [key: string]: any; // для остальных свойств
+
+  [key: string]: string | number | undefined;
 }
 
 const Logo = (props: LogoProps) => {

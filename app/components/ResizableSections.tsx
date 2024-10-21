@@ -13,7 +13,7 @@ const ResizableSections: React.FC = () => {
   const [rightWidth, setRightWidth] = useState<number>(() =>
     parseInt(localStorage.getItem("rightWidth") || "300", 10)
   );
-  const [isRightSectionVisible, setIsRightSectionVisible] = useState<boolean>(
+  const [isRightSectionVisible] = useState<boolean>(
     () => localStorage.getItem("rightSectionVisible") === "true"
   );
 

@@ -34,15 +34,15 @@ const RightSection = ({
     }
   }, [htmlCode]);
 
-  const handleCheckTask2 = () => {
-    if (htmlCode.includes("<div>") && htmlCode.includes("</div>")) {
-      setCheckedTasks((prev) => ({ ...prev, task2: true }));
-    } else {
-      setCheckedTasks((prev) => ({ ...prev, task2: false }));
-    }
-  };
-
+  // Объявляем handleCheckTask2 внутри useEffect, чтобы не было необходимости добавлять его в зависимости
   useEffect(() => {
+    const handleCheckTask2 = () => {
+      if (htmlCode.includes("<div>") && htmlCode.includes("</div>")) {
+        setCheckedTasks((prev) => ({ ...prev, task2: true }));
+      } else {
+        setCheckedTasks((prev) => ({ ...prev, task2: false }));
+      }
+    };
     handleCheckTask2();
   }, [htmlCode]);
 
