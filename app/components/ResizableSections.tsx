@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import LeftSection from "./LeftSection";
 import MiddleSection from "./MiddleSection";
 import RightSection from "./RightSection";
@@ -21,7 +21,7 @@ const ResizableSections: React.FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMoveLeft = (e: MouseEvent) => {
-    if (!isDraggingLeft.current) return;
+    if (!isDraggingLeft.current || typeof window === "undefined") return;
     const newLeftWidth = e.clientX;
     const totalWidth =
       window.innerWidth - (isRightSectionVisible ? rightWidth : 0);
@@ -31,7 +31,7 @@ const ResizableSections: React.FC = () => {
   };
 
   const handleMouseMoveRight = (e: MouseEvent) => {
-    if (!isDraggingRight.current) return;
+    if (!isDraggingRight.current || typeof window === "undefined") return;
     const newRightWidth = Math.min(window.innerWidth - e.clientX, 500);
     const totalWidth = window.innerWidth - leftWidth;
     if (newRightWidth >= 0 && newRightWidth <= totalWidth - 100) {
@@ -41,8 +41,10 @@ const ResizableSections: React.FC = () => {
 
   const handleMouseDownLeft = () => {
     isDraggingLeft.current = true;
-    document.addEventListener("mousemove", handleMouseMoveLeft);
-    document.addEventListener("mouseup", handleMouseUp);
+    if (typeof window !== "undefined") {
+      document.addEventListener("mousemove", handleMouseMoveLeft);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
     if (overlayRef.current) {
       overlayRef.current.style.display = "block";
     }
@@ -50,8 +52,10 @@ const ResizableSections: React.FC = () => {
 
   const handleMouseDownRight = () => {
     isDraggingRight.current = true;
-    document.addEventListener("mousemove", handleMouseMoveRight);
-    document.addEventListener("mouseup", handleMouseUp);
+    if (typeof window !== "undefined") {
+      document.addEventListener("mousemove", handleMouseMoveRight);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
     if (overlayRef.current) {
       overlayRef.current.style.display = "block";
     }
@@ -60,16 +64,21 @@ const ResizableSections: React.FC = () => {
   const handleMouseUp = () => {
     isDraggingLeft.current = false;
     isDraggingRight.current = false;
-    document.removeEventListener("mousemove", handleMouseMoveLeft);
-    document.removeEventListener("mousemove", handleMouseMoveRight);
-    document.removeEventListener("mouseup", handleMouseUp);
+    if (typeof window !== "undefined") {
+      document.removeEventListener("mousemove", handleMouseMoveLeft);
+      document.removeEventListener("mousemove", handleMouseMoveRight);
+      document.removeEventListener("mouseup", handleMouseUp);
+    }
     if (overlayRef.current) {
       overlayRef.current.style.display = "none";
     }
   };
 
+  // Проверка на наличие объекта window перед расчетом middleWidth
   const middleWidth =
-    window.innerWidth - leftWidth - (isRightSectionVisible ? rightWidth : 0);
+    typeof window !== "undefined"
+      ? window.innerWidth - leftWidth - (isRightSectionVisible ? rightWidth : 0)
+      : 0;
 
   return (
     <Flex height="93vh" direction={["column", "row"]} position="relative">
