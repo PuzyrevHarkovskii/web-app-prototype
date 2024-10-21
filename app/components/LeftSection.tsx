@@ -63,7 +63,7 @@ const LeftSection = ({
         extensions={activeButton === "html" ? [html()] : [css()]}
         onChange={handleContentChange}
         style={{
-          fontSize: "1rem",
+          fontSize: "1.5rem",
         }}
         theme={"dark"}
       />

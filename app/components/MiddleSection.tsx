@@ -38,7 +38,7 @@ const MiddleSection = ({
   }, [htmlCode, cssCode]);
 
   return (
-    <Box width={`${width}px`} height="100%" border="1px solid #ccc">
+    <Box width={`${width}px`} height="100%">
       <iframe
         ref={iframeRef}
         style={{
