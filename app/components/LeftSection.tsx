@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react"; // Удален неиспользуемый useEffect
 import { Box, Textarea, Button, ButtonGroup } from "@chakra-ui/react";
 
 const LeftSection = ({
@@ -12,33 +12,12 @@ const LeftSection = ({
 }) => {
   const [activeButton, setActiveButton] = useState<"html" | "css">("html");
 
-  // Закомментированы все обращения к localStorage
-  /*
-  const [htmlContent, setHtmlContent] = useState<string>(
-    () => localStorage.getItem("htmlCode") || "<h1>Hello World</h1>"
-  );
-  const [cssContent, setCssContent] = useState<string>(
-    () =>
-      localStorage.getItem("cssCode") || "body { background-color: tomato; }"
-  );
-  */
-
   const [htmlContent, setHtmlContent] = useState<string>(
     "<h1>Hello World</h1>"
   );
   const [cssContent, setCssContent] = useState<string>(
     "body { background-color: tomato; }"
   );
-
-  /*
-  useEffect(() => {
-    localStorage.setItem("htmlCode", htmlContent);
-  }, [htmlContent]);
-
-  useEffect(() => {
-    localStorage.setItem("cssCode", cssContent);
-  }, [cssContent]);
-  */
 
   const handleLanguageChange = (lang: "html" | "css") => {
     setActiveButton(lang);
