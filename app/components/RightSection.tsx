@@ -1,14 +1,51 @@
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Divider,
+  Checkbox,
+  VStack,
+} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 
 const RightSection = ({
   width,
   isVisible,
   onMouseDown,
+  htmlCode,
 }: {
   width: number;
   isVisible: boolean;
   onMouseDown: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  htmlCode: string;
 }) => {
+  const [checkedTasks, setCheckedTasks] = useState({
+    task1: false,
+    task2: false,
+    task3: false,
+    task4: false,
+  });
+
+  useEffect(() => {
+    if (htmlCode.includes("<h1>") && htmlCode.includes("</h1>")) {
+      setCheckedTasks((prev) => ({ ...prev, task1: true }));
+    } else {
+      setCheckedTasks((prev) => ({ ...prev, task1: false }));
+    }
+  }, [htmlCode]);
+
+  const handleCheckTask2 = () => {
+    if (htmlCode.includes("<div>") && htmlCode.includes("</div>")) {
+      setCheckedTasks((prev) => ({ ...prev, task2: true }));
+    } else {
+      setCheckedTasks((prev) => ({ ...prev, task2: false }));
+    }
+  };
+
+  useEffect(() => {
+    handleCheckTask2();
+  }, [htmlCode]);
+
   return (
     <Box
       bg="#311855"
@@ -38,17 +75,96 @@ const RightSection = ({
       </Box>
 
       <Flex
+        direction="column"
         margin={6}
         borderRadius="25px"
-        border="1px solid white"
         padding={6}
-        justifyContent="center"
+        justifyContent="flex-start"
         alignItems="center"
-        width="380px"
+        width="100%"
         height="100%"
-        bg="white"
+        bg="#e0e0e0"
       >
-        <Heading color="black">Привет</Heading>
+        <Box
+          bg="#e0e0e0"
+          borderRadius="15px"
+          boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+          p={4}
+          width="100%"
+          mb={4}
+        >
+          <Heading as="h3" size="lg" textAlign="center">
+            Task List
+          </Heading>
+        </Box>
+
+        <Divider mb={4} />
+
+        <VStack spacing={6} align="stretch" width="100%">
+          <Box
+            bg="#e0e0e0"
+            borderRadius="15px"
+            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+            p={4}
+            width="100%"
+          >
+            <Checkbox
+              size="lg"
+              isChecked={checkedTasks.task1}
+              onChange={() => {}}
+            >
+              Task 1: Contains {"<h1>"} tag
+            </Checkbox>
+          </Box>
+
+          <Box
+            bg="#e0e0e0"
+            borderRadius="15px"
+            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+            p={4}
+            width="100%"
+          >
+            <Checkbox
+              size="lg"
+              isChecked={checkedTasks.task2}
+              onChange={() => {}}
+            >
+              Task 2: Contains {"<div>"} tag
+            </Checkbox>
+          </Box>
+
+          <Box
+            bg="#e0e0e0"
+            borderRadius="15px"
+            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+            p={4}
+            width="100%"
+          >
+            <Checkbox
+              size="lg"
+              isChecked={checkedTasks.task3}
+              onChange={() => {}}
+            >
+              Task 3: Some other condition
+            </Checkbox>
+          </Box>
+
+          <Box
+            bg="#e0e0e0"
+            borderRadius="15px"
+            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+            p={4}
+            width="100%"
+          >
+            <Checkbox
+              size="lg"
+              isChecked={checkedTasks.task4}
+              onChange={() => {}}
+            >
+              Task 4: Another condition
+            </Checkbox>
+          </Box>
+        </VStack>
       </Flex>
     </Box>
   );
