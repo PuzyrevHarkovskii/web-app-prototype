@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import LeftSection from "./LeftSection";
 import MiddleSection from "./MiddleSection";
 import RightSection from "./RightSection";
@@ -9,8 +9,7 @@ import Resizer from "./Resizer";
 const ResizableSections: React.FC = () => {
   const [leftWidth, setLeftWidth] = useState<number>(300);
   const [rightWidth, setRightWidth] = useState<number>(300);
-  const [isRightSectionVisible, setIsRightSectionVisible] =
-    useState<boolean>(true);
+  const [isRightSectionVisible] = useState<boolean>(true); // Удалено использование setIsRightSectionVisible
 
   const [htmlCode, setHtmlCode] = useState<string>("<h1>Hello World</h1>");
   const [cssCode, setCssCode] = useState<string>(
@@ -20,28 +19,6 @@ const ResizableSections: React.FC = () => {
   const isDraggingLeft = useRef(false);
   const isDraggingRight = useRef(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-
-  /*
-  useEffect(() => {
-    localStorage.setItem("htmlCode", htmlCode);
-  }, [htmlCode]);
-
-  useEffect(() => {
-    localStorage.setItem("cssCode", cssCode);
-  }, [cssCode]);
-
-  useEffect(() => {
-    localStorage.setItem("leftWidth", leftWidth.toString());
-  }, [leftWidth]);
-
-  useEffect(() => {
-    localStorage.setItem("rightWidth", rightWidth.toString());
-    localStorage.setItem(
-      "rightSectionVisible",
-      isRightSectionVisible.toString()
-    );
-  }, [rightWidth, isRightSectionVisible]);
-  */
 
   const handleMouseMoveLeft = (e: MouseEvent) => {
     if (!isDraggingLeft.current) return;
@@ -112,7 +89,7 @@ const ResizableSections: React.FC = () => {
         width={rightWidth}
         isVisible={isRightSectionVisible}
         onMouseDown={handleMouseDownRight}
-        htmlCode={htmlCode}
+        htmlCode={htmlCode} // Добавляем htmlCode
       />
       <Box
         ref={overlayRef}
