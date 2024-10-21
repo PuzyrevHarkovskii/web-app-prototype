@@ -44,7 +44,7 @@ const RightSection = ({
         padding={6}
         justifyContent="center"
         alignItems="center"
-        width="200px"
+        width="380px"
         height="100%"
         bg="white"
       >

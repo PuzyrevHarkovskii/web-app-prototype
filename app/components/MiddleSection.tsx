@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
 import { Box } from "@chakra-ui/react";
+import React, { useEffect, useRef } from "react";
 
 const MiddleSection = ({
   width,
@@ -22,7 +22,10 @@ const MiddleSection = ({
           <!DOCTYPE html>
           <html lang="en">
             <head>
-              <style>${cssCode}</style>
+              <style>
+                /* Применяем CSS, переданный из левой секции */
+                ${cssCode}
+              </style>
             </head>
             <body>
               ${htmlCode}
@@ -35,15 +38,16 @@ const MiddleSection = ({
   }, [htmlCode, cssCode]);
 
   return (
-    <Box width={`${width}px`} height="100%">
+    <Box width={`${width}px`} height="100%" border="1px solid #ccc">
       <iframe
         ref={iframeRef}
         style={{
           width: "100%",
           height: "100%",
           border: "none",
+          backgroundColor: "transparent",
         }}
-        title="Preview"
+        title="Code Preview"
       />
     </Box>
   );
