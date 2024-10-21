@@ -3,68 +3,106 @@ import { Box, Flex } from "@chakra-ui/react";
 import React, { useRef, useState, useEffect } from "react";
 import LeftSection from "./LeftSection";
 import MiddleSection from "./MiddleSection";
+import RightSection from "./RightSection";
 import Resizer from "./Resizer";
 
 const ResizableSections: React.FC = () => {
-  const [leftWidth, setLeftWidth] = useState<number>(() => {
-    const savedLeftWidth = localStorage.getItem("leftWidth");
-    return savedLeftWidth ? parseInt(savedLeftWidth, 10) : 300; // Устанавливаем 300 по умолчанию, если в localStorage нет данных
-  });
+  const [leftWidth, setLeftWidth] = useState<number>(() =>
+    parseInt(localStorage.getItem("leftWidth") || "300", 10)
+  );
+  const [rightWidth, setRightWidth] = useState<number>(() =>
+    parseInt(localStorage.getItem("rightWidth") || "300", 10)
+  );
+  const [isRightSectionVisible, setIsRightSectionVisible] = useState<boolean>(
+    () => localStorage.getItem("rightSectionVisible") === "true"
+  );
 
   const [htmlCode, setHtmlCode] = useState<string>(
     () => localStorage.getItem("htmlCode") || "<h1>Hello World</h1>"
   );
-
   const [cssCode, setCssCode] = useState<string>(
     () =>
       localStorage.getItem("cssCode") || "body { background-color: tomato; }"
   );
 
-  const isDragging = useRef(false);
+  const isDraggingLeft = useRef(false);
+  const isDraggingRight = useRef(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Сохранение данных в localStorage при изменении
   useEffect(() => {
-    localStorage.setItem("htmlCode", htmlCode); // Сохраняем HTML в localStorage
+    localStorage.setItem("htmlCode", htmlCode);
   }, [htmlCode]);
 
   useEffect(() => {
-    localStorage.setItem("cssCode", cssCode); // Сохраняем CSS в localStorage
+    localStorage.setItem("cssCode", cssCode);
   }, [cssCode]);
 
   useEffect(() => {
-    localStorage.setItem("leftWidth", leftWidth.toString()); // Сохраняем ширину левой секции в localStorage
+    localStorage.setItem("leftWidth", leftWidth.toString());
   }, [leftWidth]);
 
-  // Перетаскивание разделителя
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging.current) return;
+  useEffect(() => {
+    localStorage.setItem("rightWidth", rightWidth.toString());
+    localStorage.setItem(
+      "rightSectionVisible",
+      isRightSectionVisible.toString()
+    );
+  }, [rightWidth, isRightSectionVisible]);
+
+  const handleMouseMoveLeft = (e: MouseEvent) => {
+    if (!isDraggingLeft.current) return;
     const newLeftWidth = e.clientX;
-    const totalWidth = window.innerWidth;
+    const totalWidth =
+      window.innerWidth - (isRightSectionVisible ? rightWidth : 0);
     if (newLeftWidth >= 100 && newLeftWidth <= totalWidth - 100) {
-      setLeftWidth(newLeftWidth); // Устанавливаем новую ширину левой секции
+      setLeftWidth(newLeftWidth);
     }
   };
 
-  const handleMouseDown = () => {
-    isDragging.current = true;
-    document.addEventListener("mousemove", handleMouseMove);
+  const handleMouseMoveRight = (e: MouseEvent) => {
+    if (!isDraggingRight.current) return;
+    const newRightWidth = Math.min(window.innerWidth - e.clientX, 500);
+    const totalWidth = window.innerWidth - leftWidth;
+    if (newRightWidth >= 0 && newRightWidth <= totalWidth - 100) {
+      setRightWidth(newRightWidth);
+    }
+  };
+
+  const handleMouseDownLeft = () => {
+    isDraggingLeft.current = true;
+    document.addEventListener("mousemove", handleMouseMoveLeft);
     document.addEventListener("mouseup", handleMouseUp);
     if (overlayRef.current) {
-      overlayRef.current.style.display = "block"; // Показываем прозрачный div поверх iframe
+      overlayRef.current.style.display = "block";
+    }
+  };
+
+  const handleMouseDownRight = () => {
+    isDraggingRight.current = true;
+    document.addEventListener("mousemove", handleMouseMoveRight);
+    document.addEventListener("mouseup", handleMouseUp);
+    if (overlayRef.current) {
+      overlayRef.current.style.display = "block";
     }
   };
 
   const handleMouseUp = () => {
-    isDragging.current = false;
-    document.removeEventListener("mousemove", handleMouseMove);
+    isDraggingLeft.current = false;
+    isDraggingRight.current = false;
+    document.removeEventListener("mousemove", handleMouseMoveLeft);
+    document.removeEventListener("mousemove", handleMouseMoveRight);
     document.removeEventListener("mouseup", handleMouseUp);
     if (overlayRef.current) {
-      overlayRef.current.style.display = "none"; // Прячем прозрачный div
+      overlayRef.current.style.display = "none";
     }
   };
 
-  const middleWidth = window.innerWidth - leftWidth; // Вычисляем ширину для средней секции
+  const toggleRightSection = () => {
+    setIsRightSectionVisible(!isRightSectionVisible);
+  };
+
+  const middleWidth =
+    window.innerWidth - leftWidth - (isRightSectionVisible ? rightWidth : 0);
 
   return (
     <Flex height="93vh" direction={["column", "row"]} position="relative">
@@ -73,11 +111,17 @@ const ResizableSections: React.FC = () => {
         setHtmlCode={setHtmlCode}
         setCssCode={setCssCode}
       />
-      <Resizer onMouseDown={handleMouseDown} />
+      <Resizer onMouseDown={handleMouseDownLeft} />
       <MiddleSection
         width={middleWidth}
         htmlCode={htmlCode}
         cssCode={cssCode}
+      />
+      {isRightSectionVisible && <Resizer onMouseDown={handleMouseDownRight} />}
+      <RightSection
+        width={rightWidth}
+        isVisible={isRightSectionVisible}
+        onMouseDown={handleMouseDownRight}
       />
       <Box
         ref={overlayRef}
