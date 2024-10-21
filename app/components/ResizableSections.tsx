@@ -7,46 +7,64 @@ import RightSection from "./RightSection";
 import Resizer from "./Resizer";
 
 const ResizableSections: React.FC = () => {
-  const [leftWidth, setLeftWidth] = useState<number>(() =>
-    parseInt(localStorage.getItem("leftWidth") || "300", 10)
-  );
-  const [rightWidth, setRightWidth] = useState<number>(() =>
-    parseInt(localStorage.getItem("rightWidth") || "300", 10)
-  );
-  const [isRightSectionVisible] = useState<boolean>(
-    () => localStorage.getItem("rightSectionVisible") === "true"
-  );
+  const [leftWidth, setLeftWidth] = useState<number>(300); // Инициализируем состояние
+  const [rightWidth, setRightWidth] = useState<number>(300); // Инициализируем состояние
+  const [isRightSectionVisible, setIsRightSectionVisible] =
+    useState<boolean>(true);
 
-  const [htmlCode, setHtmlCode] = useState<string>(
-    () => localStorage.getItem("htmlCode") || "<h1>Hello World</h1>"
-  );
+  const [htmlCode, setHtmlCode] = useState<string>("<h1>Hello World</h1>");
   const [cssCode, setCssCode] = useState<string>(
-    () =>
-      localStorage.getItem("cssCode") || "body { background-color: tomato; }"
+    "body { background-color: tomato; }"
   );
 
   const isDraggingLeft = useRef(false);
   const isDraggingRight = useRef(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
+  // Загружаем данные из localStorage только на клиентской стороне
   useEffect(() => {
-    localStorage.setItem("htmlCode", htmlCode);
+    if (typeof window !== "undefined") {
+      const storedLeftWidth = localStorage.getItem("leftWidth");
+      const storedRightWidth = localStorage.getItem("rightWidth");
+      const storedRightSectionVisible =
+        localStorage.getItem("rightSectionVisible") === "true";
+      const storedHtmlCode = localStorage.getItem("htmlCode");
+      const storedCssCode = localStorage.getItem("cssCode");
+
+      if (storedLeftWidth) setLeftWidth(parseInt(storedLeftWidth, 10));
+      if (storedRightWidth) setRightWidth(parseInt(storedRightWidth, 10));
+      setIsRightSectionVisible(storedRightSectionVisible);
+      if (storedHtmlCode) setHtmlCode(storedHtmlCode);
+      if (storedCssCode) setCssCode(storedCssCode);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("htmlCode", htmlCode);
+    }
   }, [htmlCode]);
 
   useEffect(() => {
-    localStorage.setItem("cssCode", cssCode);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cssCode", cssCode);
+    }
   }, [cssCode]);
 
   useEffect(() => {
-    localStorage.setItem("leftWidth", leftWidth.toString());
+    if (typeof window !== "undefined") {
+      localStorage.setItem("leftWidth", leftWidth.toString());
+    }
   }, [leftWidth]);
 
   useEffect(() => {
-    localStorage.setItem("rightWidth", rightWidth.toString());
-    localStorage.setItem(
-      "rightSectionVisible",
-      isRightSectionVisible.toString()
-    );
+    if (typeof window !== "undefined") {
+      localStorage.setItem("rightWidth", rightWidth.toString());
+      localStorage.setItem(
+        "rightSectionVisible",
+        isRightSectionVisible.toString()
+      );
+    }
   }, [rightWidth, isRightSectionVisible]);
 
   const handleMouseMoveLeft = (e: MouseEvent) => {
