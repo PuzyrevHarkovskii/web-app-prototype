@@ -1,24 +1,82 @@
 "use client";
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import LeftSection from "./LeftSection";
 import MiddleSection from "./MiddleSection";
 import RightSection from "./RightSection";
 import Resizer from "./Resizer";
 
 const ResizableSections: React.FC = () => {
-  const [leftWidth, setLeftWidth] = useState<number>(300);
-  const [rightWidth, setRightWidth] = useState<number>(300);
-  const [isRightSectionVisible] = useState<boolean>(true); // Удалено использование setIsRightSectionVisible
+  const [leftWidth, setLeftWidth] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      return parseInt(localStorage.getItem("leftWidth") || "300", 10);
+    }
+    return 300; // Default value for server-side rendering
+  });
 
-  const [htmlCode, setHtmlCode] = useState<string>("<h1>Hello World</h1>");
-  const [cssCode, setCssCode] = useState<string>(
-    "body { background-color: tomato; }"
+  const [rightWidth, setRightWidth] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      return parseInt(localStorage.getItem("rightWidth") || "300", 10);
+    }
+    return 300; // Default value for server-side rendering
+  });
+
+  const [isRightSectionVisible, setIsRightSectionVisible] = useState<boolean>(
+    () => {
+      if (typeof window !== "undefined") {
+        return localStorage.getItem("rightSectionVisible") === "true";
+      }
+      return true; // Default value for server-side rendering
+    }
   );
+
+  const [htmlCode, setHtmlCode] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("htmlCode") || "<h1>Hello World</h1>";
+    }
+    return "<h1>Hello World</h1>"; // Default value for server-side rendering
+  });
+
+  const [cssCode, setCssCode] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return (
+        localStorage.getItem("cssCode") || "body { background-color: tomato; }"
+      );
+    }
+    return "body { background-color: tomato; }"; // Default value for server-side rendering
+  });
 
   const isDraggingLeft = useRef(false);
   const isDraggingRight = useRef(false);
   const overlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("htmlCode", htmlCode);
+    }
+  }, [htmlCode]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cssCode", cssCode);
+    }
+  }, [cssCode]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("leftWidth", leftWidth.toString());
+    }
+  }, [leftWidth]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("rightWidth", rightWidth.toString());
+      localStorage.setItem(
+        "rightSectionVisible",
+        isRightSectionVisible.toString()
+      );
+    }
+  }, [rightWidth, isRightSectionVisible]);
 
   const handleMouseMoveLeft = (e: MouseEvent) => {
     if (!isDraggingLeft.current || typeof window === "undefined") return;
@@ -74,7 +132,6 @@ const ResizableSections: React.FC = () => {
     }
   };
 
-  // Проверка на наличие объекта window перед расчетом middleWidth
   const middleWidth =
     typeof window !== "undefined"
       ? window.innerWidth - leftWidth - (isRightSectionVisible ? rightWidth : 0)
@@ -98,7 +155,7 @@ const ResizableSections: React.FC = () => {
         width={rightWidth}
         isVisible={isRightSectionVisible}
         onMouseDown={handleMouseDownRight}
-        htmlCode={htmlCode} // Добавляем htmlCode
+        htmlCode={htmlCode}
       />
       <Box
         ref={overlayRef}
