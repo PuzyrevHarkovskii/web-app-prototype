@@ -1,5 +1,9 @@
-import React, { useState } from "react";
-import { Box, Textarea, Button, ButtonGroup } from "@chakra-ui/react";
+import React, { useState, useCallback } from "react";
+import { Box, Button, ButtonGroup } from "@chakra-ui/react";
+import CodeMirror from "@uiw/react-codemirror";
+import { css } from "@codemirror/lang-css";
+import { html } from "@codemirror/lang-html";
+import { ViewUpdate } from "@codemirror/view";
 
 const LeftSection = ({
   width,
@@ -23,15 +27,18 @@ const LeftSection = ({
     setActiveButton(lang);
   };
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (activeButton === "html") {
-      setHtmlContent(e.target.value);
-      setHtmlCode(e.target.value);
-    } else {
-      setCssContent(e.target.value);
-      setCssCode(e.target.value);
-    }
-  };
+  const handleContentChange = useCallback(
+    (val: string, viewUpdate: ViewUpdate) => {
+      if (activeButton === "html") {
+        setHtmlContent(val);
+        setHtmlCode(val);
+      } else {
+        setCssContent(val);
+        setCssCode(val);
+      }
+    },
+    [activeButton, setHtmlCode, setCssCode]
+  );
 
   return (
     <Box bg="#311855" width={`${width}px`} height="100%" padding="1rem">
@@ -50,12 +57,15 @@ const LeftSection = ({
         </Button>
       </ButtonGroup>
 
-      <Textarea
-        color={"white"}
-        fontSize={"2xl"}
+      <CodeMirror
         value={activeButton === "html" ? htmlContent : cssContent}
-        onChange={handleContentChange}
         height="300px"
+        extensions={activeButton === "html" ? [html()] : [css()]}
+        onChange={handleContentChange}
+        style={{
+          fontSize: "1rem",
+        }}
+        theme={"dark"}
       />
     </Box>
   );

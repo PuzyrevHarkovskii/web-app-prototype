@@ -143,7 +143,7 @@ const RightSection = ({
                 isChecked={checkedTasks.task1}
                 onChange={() => toggleAccordion(1)}
               >
-                Task 1: Contains {"<h1>"} tag
+                Задание 1: Заголовок - h1
               </Checkbox>
               <IconButton
                 ml="auto"
