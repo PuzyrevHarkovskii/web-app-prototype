@@ -7,20 +7,13 @@ interface ResizerProps {
 const Resizer: React.FC<ResizerProps> = ({ onMouseDown }) => {
   return (
     <Box
-      display={"flex"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      width="15px"
-      cursor="grab"
+      width="10px"
+      cursor="col-resize"
       bg="#383c5b"
       onMouseDown={onMouseDown}
+      height="100%"
     >
-      <Box
-        bgColor={"#222438"}
-        height={"60px"}
-        borderRadius={"full"}
-        width={"10px"}
-      />
+      <Box bgColor={"#222438"} height={"100%"} width={"4px"} margin="auto" />
     </Box>
   );
 };

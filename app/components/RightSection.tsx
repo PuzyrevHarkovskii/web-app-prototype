@@ -1,17 +1,26 @@
 import { Box, Flex, Heading } from "@chakra-ui/react";
-import { useState, useRef } from "react";
 
 const RightSection = ({ width }: { width: number }) => {
   return (
-    <Box bg="blue.500" width={`${width}%`} height="100%" overflow="hidden">
+    <Box
+      bg="#311855"
+      width={`${width}%`}
+      height="100%"
+      overflow="hidden"
+      transition="width 0.3s ease"
+    >
       <Flex
         margin={6}
-        borderRadius={"25px"}
-        border={"1px"}
+        borderRadius="25px"
+        border="1px solid white"
         padding={6}
-        content="center"
+        justifyContent="center"
+        alignItems="center"
+        width="200px"
+        height="100%"
+        bg="white"
       >
-        <Heading>Привет</Heading>
+        <Heading color="black">Привет</Heading>
       </Flex>
     </Box>
   );

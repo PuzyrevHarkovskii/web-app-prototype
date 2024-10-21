@@ -25,26 +25,26 @@ const Header: React.FC = () => {
     <Flex
       justify="space-between"
       align="center"
-      bg={useColorModeValue("gray.100", "gray.800")}
+      bg={useColorModeValue("#FEC866", "gray.800")}
       py={4}
     >
-      {/* Обертка для шариков */}
       <Flex justify="center" align="center" flexGrow={1}>
         {steps.map((step: number) => (
           <Circle
             key={step}
             size="40px"
-            bg={currentStep === step ? "blue.500" : "gray.300"}
+            border={"1px solid black"}
+            bg={currentStep === step ? "#311855" : "white"}
             color={currentStep === step ? "white" : "black"}
             mx={4}
             cursor="pointer"
             onClick={() => handleStepClick(step)}
           >
-            <Text fontSize="lg">{step}</Text>
+            <Text fontSize="3xl">{step}</Text>
           </Circle>
         ))}
       </Flex>
-      {/* Кнопка переключения темы */}
+
       <Button onClick={toggleColorMode} ml={4}>
         {colorMode === "light" ? "Темная тема" : "Светлая тема"}
       </Button>

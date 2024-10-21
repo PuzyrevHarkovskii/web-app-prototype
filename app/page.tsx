@@ -1,7 +1,7 @@
 import { div } from "framer-motion/client";
 import Image from "next/image";
 import Header from "./components/Header";
-import ResizableSections from "./components/Main";
+import ResizableSections from "./components/ResizableSections";
 
 export default function Home() {
   return (

@@ -1,11 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, ButtonGroup } from "@chakra-ui/react";
-import { EditorView } from "@codemirror/view";
-import { EditorState } from "@codemirror/state";
-import { html } from "@codemirror/lang-html";
-import { css } from "@codemirror/lang-css";
-import { autocompletion } from "@codemirror/autocomplete";
-import { dracula } from "@uiw/codemirror-theme-dracula";
+import React, { useState, useEffect } from "react";
+import { Box, Textarea, Button, ButtonGroup } from "@chakra-ui/react";
 
 const LeftSection = ({
   width,
@@ -16,84 +10,59 @@ const LeftSection = ({
   setHtmlCode: (code: string) => void;
   setCssCode: (code: string) => void;
 }) => {
-  const editorRef = useRef<HTMLDivElement>(null);
-  const viewRef = useRef<EditorView | null>(null);
-  const [htmlContent, setHtmlContent] = useState("<h1>Hello World</h1>");
-  const [cssContent, setCssContent] = useState(
-    "body { background-color: tomato; }"
+  const [activeButton, setActiveButton] = useState<"html" | "css">("html");
+  const [htmlContent, setHtmlContent] = useState<string>(
+    () => localStorage.getItem("htmlCode") || "<h1>Hello World</h1>"
   );
-  const [language, setLanguage] = useState<"html" | "css">("html");
+  const [cssContent, setCssContent] = useState<string>(
+    () =>
+      localStorage.getItem("cssCode") || "body { background-color: tomato; }"
+  );
 
   useEffect(() => {
-    const languageExtension = language === "html" ? html() : css();
-    const content = language === "html" ? htmlContent : cssContent;
+    localStorage.setItem("htmlCode", htmlContent);
+  }, [htmlContent]);
 
-    const updateListener = EditorView.updateListener.of((update) => {
-      if (update.docChanged) {
-        const code = update.state.doc.toString();
-        if (language === "html") {
-          setHtmlContent(code);
-          setHtmlCode(code);
-        } else {
-          setCssContent(code);
-          setCssCode(code);
-        }
-      }
-    });
+  useEffect(() => {
+    localStorage.setItem("cssCode", cssContent);
+  }, [cssContent]);
 
-    // Создаем редактор только один раз
-    if (!viewRef.current) {
-      viewRef.current = new EditorView({
-        state: EditorState.create({
-          doc: content,
-          extensions: [
-            languageExtension,
-            autocompletion(),
-            dracula,
-            updateListener,
-          ],
-        }),
-        parent: editorRef.current!,
-      });
+  const handleLanguageChange = (lang: "html" | "css") => {
+    setActiveButton(lang);
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (activeButton === "html") {
+      setHtmlContent(e.target.value);
+      setHtmlCode(e.target.value);
     } else {
-      const newState = EditorState.create({
-        doc: content,
-        extensions: [
-          languageExtension,
-          autocompletion(),
-          dracula,
-          updateListener,
-        ],
-      });
-      viewRef.current.setState(newState);
+      setCssContent(e.target.value);
+      setCssCode(e.target.value);
     }
-
-    return () => {
-      if (viewRef.current) {
-        viewRef.current.destroy();
-        viewRef.current = null;
-      }
-    };
-  }, [language, htmlContent, cssContent, setHtmlCode, setCssCode]);
+  };
 
   return (
-    <Box bg="#352830" width={`${width}%`} height="100%" padding="1rem">
-      <ButtonGroup spacing="4" mb="4">
-        <Button colorScheme="teal" onClick={() => setLanguage("html")}>
+    <Box bg="#311855" width={`${width}px`} height="100%" padding="1rem">
+      <ButtonGroup display="flex" justifyContent="space-between" mb="3">
+        <Button
+          colorScheme={activeButton === "html" ? "purple" : "gray"}
+          onClick={() => handleLanguageChange("html")}
+        >
           HTML
         </Button>
-        <Button colorScheme="teal" onClick={() => setLanguage("css")}>
+        <Button
+          colorScheme={activeButton === "css" ? "purple" : "gray"}
+          onClick={() => handleLanguageChange("css")}
+        >
           CSS
         </Button>
       </ButtonGroup>
 
-      <Box
-        ref={editorRef}
-        fontSize={"1.5em"}
+      <Textarea
+        color={"white"}
+        value={activeButton === "html" ? htmlContent : cssContent}
+        onChange={handleContentChange}
         height="300px"
-        overflow="auto"
-        border="1px solid #ccc"
-        borderRadius="8px"
       />
     </Box>
   );
