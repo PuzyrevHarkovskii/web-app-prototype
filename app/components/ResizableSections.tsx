@@ -21,50 +21,27 @@ const ResizableSections: React.FC = () => {
   const isDraggingRight = useRef(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
+  /*
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedLeftWidth = localStorage.getItem("leftWidth");
-      const storedRightWidth = localStorage.getItem("rightWidth");
-      const storedRightSectionVisible =
-        localStorage.getItem("rightSectionVisible") === "true";
-      const storedHtmlCode = localStorage.getItem("htmlCode");
-      const storedCssCode = localStorage.getItem("cssCode");
-
-      if (storedLeftWidth) setLeftWidth(parseInt(storedLeftWidth, 10));
-      if (storedRightWidth) setRightWidth(parseInt(storedRightWidth, 10));
-      setIsRightSectionVisible(storedRightSectionVisible);
-      if (storedHtmlCode) setHtmlCode(storedHtmlCode);
-      if (storedCssCode) setCssCode(storedCssCode);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("htmlCode", htmlCode);
-    }
+    localStorage.setItem("htmlCode", htmlCode);
   }, [htmlCode]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cssCode", cssCode);
-    }
+    localStorage.setItem("cssCode", cssCode);
   }, [cssCode]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("leftWidth", leftWidth.toString());
-    }
+    localStorage.setItem("leftWidth", leftWidth.toString());
   }, [leftWidth]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("rightWidth", rightWidth.toString());
-      localStorage.setItem(
-        "rightSectionVisible",
-        isRightSectionVisible.toString()
-      );
-    }
+    localStorage.setItem("rightWidth", rightWidth.toString());
+    localStorage.setItem(
+      "rightSectionVisible",
+      isRightSectionVisible.toString()
+    );
   }, [rightWidth, isRightSectionVisible]);
+  */
 
   const handleMouseMoveLeft = (e: MouseEvent) => {
     if (!isDraggingLeft.current) return;
@@ -135,7 +112,7 @@ const ResizableSections: React.FC = () => {
         width={rightWidth}
         isVisible={isRightSectionVisible}
         onMouseDown={handleMouseDownRight}
-        htmlCode={htmlCode} // Добавляем htmlCode
+        htmlCode={htmlCode}
       />
       <Box
         ref={overlayRef}
