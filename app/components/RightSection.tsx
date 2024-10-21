@@ -5,8 +5,12 @@ import {
   Divider,
   Checkbox,
   VStack,
+  useColorModeValue,
+  Collapse,
+  IconButton,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 const RightSection = ({
   width,
@@ -22,9 +26,20 @@ const RightSection = ({
   const [checkedTasks, setCheckedTasks] = useState({
     task1: false,
     task2: false,
-    task3: false,
-    task4: false,
   });
+
+  const [isOpenTask1, setIsOpenTask1] = useState(false);
+  const [isOpenTask2, setIsOpenTask2] = useState(false);
+
+  const bg = useColorModeValue("#e0e0e0", "#1A202C");
+  const boxShadow = useColorModeValue(
+    "5px 5px 15px #bebebe, -5px -5px 15px #ffffff",
+    "5px 5px 15px #2D3748, -5px -5px 15px #4A5568"
+  );
+  const headingColor = useColorModeValue("black", "white");
+  const dividerColor = useColorModeValue("gray.600", "gray.400");
+  const additionalInfoBg = useColorModeValue("gray.100", "gray.700");
+  const additionalInfoText = useColorModeValue("black", "white");
 
   useEffect(() => {
     if (htmlCode.includes("<h1>") && htmlCode.includes("</h1>")) {
@@ -34,23 +49,34 @@ const RightSection = ({
     }
   }, [htmlCode]);
 
-  // Объявляем handleCheckTask2 внутри useEffect, чтобы не было необходимости добавлять его в зависимости
   useEffect(() => {
-    const handleCheckTask2 = () => {
-      if (htmlCode.includes("<div>") && htmlCode.includes("</div>")) {
-        setCheckedTasks((prev) => ({ ...prev, task2: true }));
-      } else {
-        setCheckedTasks((prev) => ({ ...prev, task2: false }));
-      }
-    };
-    handleCheckTask2();
+    if (htmlCode.includes("<div>") && htmlCode.includes("</div>")) {
+      setCheckedTasks((prev) => ({ ...prev, task2: true }));
+    } else {
+      setCheckedTasks((prev) => ({ ...prev, task2: false }));
+    }
   }, [htmlCode]);
+
+  const toggleAccordion = (taskNumber: number) => {
+    switch (taskNumber) {
+      case 1:
+        setIsOpenTask1(!isOpenTask1);
+        break;
+      case 2:
+        setIsOpenTask2(!isOpenTask2);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <Box
       bg="#311855"
       width={isVisible ? `${width}px` : "500px"}
       height="100%"
+      pr={4}
       overflow="hidden"
       transition="transform 0.3s ease"
       transform={isVisible ? "translateX(0)" : "translateX(500px)"}
@@ -76,93 +102,107 @@ const RightSection = ({
 
       <Flex
         direction="column"
-        margin={6}
+        margin={5}
         borderRadius="25px"
         padding={6}
         justifyContent="flex-start"
         alignItems="center"
         width="100%"
         height="100%"
-        bg="#e0e0e0"
+        bg={bg}
       >
         <Box
-          bg="#e0e0e0"
+          bg={bg}
           borderRadius="15px"
-          boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+          boxShadow={boxShadow}
           p={4}
           width="100%"
           mb={4}
         >
-          <Heading as="h3" size="lg" textAlign="center">
+          <Heading as="h3" size="lg" textAlign="center" color={headingColor}>
             Task List
           </Heading>
         </Box>
 
-        <Divider mb={4} />
+        <Divider mb={4} borderColor={dividerColor} />
 
         <VStack spacing={6} align="stretch" width="100%">
+          {/* Task 1 */}
           <Box
-            bg="#e0e0e0"
+            bg={bg}
             borderRadius="15px"
-            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+            boxShadow={boxShadow}
             p={4}
             width="100%"
           >
-            <Checkbox
-              size="lg"
-              isChecked={checkedTasks.task1}
-              onChange={() => {}}
-            >
-              Task 1: Contains {"<h1>"} tag
-            </Checkbox>
+            <Flex alignItems="center">
+              <Checkbox
+                iconColor="yellow.400"
+                colorScheme="purple"
+                size="lg"
+                isChecked={checkedTasks.task1}
+                onChange={() => toggleAccordion(1)}
+              >
+                Task 1: Contains {"<h1>"} tag
+              </Checkbox>
+              <IconButton
+                ml="auto"
+                aria-label="Toggle Task 1"
+                icon={isOpenTask1 ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                onClick={() => toggleAccordion(1)}
+                variant="ghost"
+              />
+            </Flex>
+            <Collapse in={isOpenTask1} animateOpacity>
+              <Box
+                mt={4}
+                p={2}
+                bg={additionalInfoBg} // Цвет для темной темы
+                rounded="md"
+                color={additionalInfoText} // Цвет текста для темной темы
+              >
+                Additional information about Task 1
+              </Box>
+            </Collapse>
           </Box>
 
+          {/* Task 2 */}
           <Box
-            bg="#e0e0e0"
+            bg={bg}
             borderRadius="15px"
-            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
+            boxShadow={boxShadow}
             p={4}
             width="100%"
           >
-            <Checkbox
-              size="lg"
-              isChecked={checkedTasks.task2}
-              onChange={() => {}}
-            >
-              Task 2: Contains {"<div>"} tag
-            </Checkbox>
-          </Box>
-
-          <Box
-            bg="#e0e0e0"
-            borderRadius="15px"
-            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
-            p={4}
-            width="100%"
-          >
-            <Checkbox
-              size="lg"
-              isChecked={checkedTasks.task3}
-              onChange={() => {}}
-            >
-              Task 3: Some other condition
-            </Checkbox>
-          </Box>
-
-          <Box
-            bg="#e0e0e0"
-            borderRadius="15px"
-            boxShadow="5px 5px 15px #bebebe, -5px -5px 15px #ffffff"
-            p={4}
-            width="100%"
-          >
-            <Checkbox
-              size="lg"
-              isChecked={checkedTasks.task4}
-              onChange={() => {}}
-            >
-              Task 4: Another condition
-            </Checkbox>
+            <Flex alignItems="center">
+              <Checkbox
+                iconColor="yellow.400"
+                colorScheme="purple"
+                size="lg"
+                isChecked={checkedTasks.task2}
+                onChange={() => toggleAccordion(2)}
+              >
+                Task 2: Contains {"<div>"} tag
+              </Checkbox>
+              <IconButton
+                ml="auto"
+                aria-label="Toggle Task 2"
+                icon={isOpenTask2 ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                onClick={() => toggleAccordion(2)}
+                variant="ghost"
+              />
+            </Flex>
+            <Collapse in={isOpenTask2} animateOpacity>
+              <Box
+                mt={4}
+                p={2}
+                bg={additionalInfoBg}
+                rounded="md"
+                color={additionalInfoText}
+              >
+                Additional information about Task 2
+              </Box>
+            </Collapse>
           </Box>
         </VStack>
       </Flex>

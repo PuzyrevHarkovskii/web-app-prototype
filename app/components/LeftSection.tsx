@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Удален неиспользуемый useEffect
+import React, { useState } from "react";
 import { Box, Textarea, Button, ButtonGroup } from "@chakra-ui/react";
 
 const LeftSection = ({
@@ -52,6 +52,7 @@ const LeftSection = ({
 
       <Textarea
         color={"white"}
+        fontSize={"2xl"}
         value={activeButton === "html" ? htmlContent : cssContent}
         onChange={handleContentChange}
         height="300px"

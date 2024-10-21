@@ -128,7 +128,7 @@ const ResizableSections: React.FC = () => {
         width={rightWidth}
         isVisible={isRightSectionVisible}
         onMouseDown={handleMouseDownRight}
-        htmlCode={htmlCode} // Добавляем htmlCode
+        htmlCode={htmlCode}
       />
       <Box
         ref={overlayRef}
