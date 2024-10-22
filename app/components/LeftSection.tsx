@@ -4,6 +4,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { css } from "@codemirror/lang-css";
 import { html } from "@codemirror/lang-html";
 import { ViewUpdate } from "@codemirror/view";
+import { EditorView } from "@codemirror/view";
 
 const LeftSection = ({
   width,
@@ -60,12 +61,15 @@ const LeftSection = ({
       <CodeMirror
         value={activeButton === "html" ? htmlContent : cssContent}
         height="300px"
-        extensions={activeButton === "html" ? [html()] : [css()]}
+        extensions={[
+          activeButton === "html" ? html() : css(),
+          EditorView.lineWrapping,
+        ]}
         onChange={handleContentChange}
+        theme={"dark"}
         style={{
           fontSize: "1.5rem",
         }}
-        theme={"dark"}
       />
     </Box>
   );
