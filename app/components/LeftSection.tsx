@@ -60,7 +60,7 @@ const LeftSection = ({
 
       <CodeMirror
         value={activeButton === "html" ? htmlContent : cssContent}
-        height="300px"
+        height="60vh"
         extensions={[
           activeButton === "html" ? html() : css(),
           EditorView.lineWrapping,
