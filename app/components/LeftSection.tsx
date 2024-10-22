@@ -42,15 +42,30 @@ const LeftSection = ({
   );
 
   return (
-    <Box bg="#311855" width={`${width}px`} height="100%" padding="1rem">
-      <ButtonGroup display="flex" justifyContent="space-between" mb="3">
+    <Box
+      bg="#311855"
+      minWidth={"10%"}
+      width={`${width}px`}
+      height="100%"
+      padding="1rem"
+    >
+      <ButtonGroup
+        display="flex"
+        spacing={0.5}
+        justifyContent="space-between"
+        mb="2"
+      >
         <Button
+          borderRadius={"0"}
+          width={"100%"}
           colorScheme={activeButton === "html" ? "purple" : "gray"}
           onClick={() => handleLanguageChange("html")}
         >
           HTML
         </Button>
         <Button
+          borderRadius={"0"}
+          width={"100%"}
           colorScheme={activeButton === "css" ? "purple" : "gray"}
           onClick={() => handleLanguageChange("css")}
         >

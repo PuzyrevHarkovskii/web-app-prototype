@@ -25,13 +25,13 @@ const Header: React.FC = () => {
       justify="space-between"
       align="center"
       bg={useColorModeValue("#FEC866", "gray.800")}
-      py={4}
+      py={2}
     >
       <Flex justify="center" align="center" flexGrow={1}>
         {steps.map((step: number) => (
           <Circle
             key={step}
-            size="40px"
+            size="30px"
             border={"1px solid black"}
             bg={currentStep === step ? "#311855" : "white"}
             color={currentStep === step ? "white" : "black"}
@@ -39,7 +39,7 @@ const Header: React.FC = () => {
             cursor="pointer"
             onClick={() => handleStepClick(step)}
           >
-            <Text fontSize="3xl">{step}</Text>
+            <Text fontSize="xl">{step}</Text>
           </Circle>
         ))}
       </Flex>
