@@ -129,6 +129,7 @@ const RightSection = ({
         <VStack spacing={6} align="stretch" width="100%">
           {/* Task 1 */}
           <Box
+            _hover={{ bg: "#bcbcbc", transition: "background-color 0.3s ease" }}
             bg={bg}
             borderRadius="15px"
             boxShadow={boxShadow}
@@ -157,9 +158,9 @@ const RightSection = ({
               <Box
                 mt={4}
                 p={2}
-                bg={additionalInfoBg} // Цвет для темной темы
+                bg={additionalInfoBg}
                 rounded="md"
-                color={additionalInfoText} // Цвет текста для темной темы
+                color={additionalInfoText}
               >
                 Additional information about Task 1
               </Box>
@@ -168,6 +169,7 @@ const RightSection = ({
 
           {/* Task 2 */}
           <Box
+            _hover={{ bg: "#bcbcbc", transition: "background-color 0.3s ease" }}
             bg={bg}
             borderRadius="15px"
             boxShadow={boxShadow}
